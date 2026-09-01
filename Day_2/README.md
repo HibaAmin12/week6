@@ -1,409 +1,218 @@
-# 📊 Data Cleaning, Preprocessing & Exploratory Data Analysis
+# Week 6 — EDA Precision Lab
 
 ## 📌 Overview
 
-This project contains my **Day 2 practical work for Week 6**, focused on understanding and implementing important concepts of **Data Cleaning, Data Preprocessing, Feature Transformation, and Exploratory Data Analysis (EDA)** using Python.
+This project focuses on performing a **careful and reproducible Exploratory Data Analysis (EDA)** on learner engagement and course completion data.
 
-Today, I studied the concepts and then **practically implemented them on a sample dataset** to understand how raw data is prepared, transformed, analyzed, and visualized.
+The analysis goes beyond basic visualization by validating numerical claims, interpreting relationships correctly, distinguishing **association from causation**, and using statistical techniques such as **Pearson correlation** and **Bootstrap 95% Confidence Intervals**.
 
-The practical work covers:
+The goal is to produce findings that are not only visually clear but also **statistically supported and correctly interpreted**.
 
-* Data Cleaning
-* Handling Missing Values
-* Removing Duplicate Records
-* Handling Inconsistent Data
-* Categorical Data Encoding
-* One-Hot Encoding
-* Label Encoding
-* Feature Scaling
-* Min-Max Scaling
-* Standardization
-* Z-Score
-* Normalization vs Standardization
-* Exploratory Data Analysis (EDA)
-* Data Visualization
-* Correlation Analysis
-* Visualization Best Practices
+---
+
+## 🎯 Objectives
+
+The main objectives of this analysis are to:
+
+* Explore learner engagement and completion patterns.
+* Analyze the relationship between weekly login hours and completion.
+* Compare completion rates across different course tracks.
+* Examine the relationship between forum activity and completion.
+* Calculate and verify the overall mean completion.
+* Quantify the difference between Data Science and Web Dev completion rates.
+* Use Bootstrap resampling to construct a **95% confidence interval**.
+* Avoid unsupported causal claims from observational data.
+* Validate all numerical findings using fresh calculations.
+
+---
+
+## 📊 Dataset
+
+The analysis uses a learner-level dataset stored in the `learners` DataFrame.
+
+Key variables include:
+
+| Variable             | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| `course_track`       | Learner's course track                              |
+| `weekly_login_hours` | Average weekly time spent logging into the platform |
+| `completion_pct`     | Course completion percentage                        |
+| `forum_posts`        | Number of forum posts made by the learner           |
+
+The dataset is analyzed using Python and pandas.
+
+---
+
+## 🔍 Analysis Performed
+
+### 1. Weekly Login Hours vs. Completion
+
+A scatter plot and Pearson correlation are used to examine whether learners who spend more time logging in tend to have higher completion percentages.
+
+The analysis identifies a **positive association** between weekly login hours and completion.
+
+However, because the data are observational, the result does **not establish causation**. Other factors, such as learner motivation, may influence both login activity and completion.
+
+---
+
+### 2. Completion by Course Track
+
+Course tracks are categorical groups, so the comparison is interpreted as a **group-level comparison** rather than a relationship between two continuous variables.
+
+The analysis compares completion across:
+
+* Data Science
+* Web Dev
+* Design
+
+Among the three tracks, **Data Science has the highest observed average completion**.
+
+---
+
+### 3. Forum Activity vs. Completion
+
+Pearson correlation is used to evaluate the relationship between forum activity and completion.
+
+The correlation is reported objectively, even when the relationship is weak or close to zero. This avoids selectively reporting only strong results.
+
+---
+
+### 4. Overall Completion
+
+The overall mean completion is calculated directly from the `learners` DataFrame.
+
+This ensures that the reported value is based on the actual dataset rather than relying on an approximate claim.
+
+---
+
+### 5. Data Science vs. Web Dev
+
+The mean completion rates are compared directly:
+
+* **Data Science:** 76.7756%
+* **Web Dev:** 66.9564%
+* **Mean gap:** 9.8192 percentage points
+
+To assess the uncertainty around this difference, **10,000 bootstrap samples** are generated.
+
+The resulting Bootstrap 95% Confidence Interval is:
+
+**[6.3050, 13.2346]**
+
+Since the confidence interval **does not include zero**, the observed difference provides statistical evidence that Data Science has a higher mean completion rate than Web Dev.
+
+---
+
+## 📈 Statistical Methods
+
+### Pearson Correlation
+
+Pearson correlation is used to measure the strength and direction of a linear association between numerical variables.
+
+A positive value indicates that the variables tend to increase together, while a value close to zero indicates little linear association.
+
+> Correlation indicates association, not causation.
+
+### Bootstrap 95% Confidence Interval
+
+Bootstrap resampling is used to estimate the uncertainty around the difference in mean completion between Data Science and Web Dev.
+
+The procedure:
+
+1. Randomly resample each course-track group **with replacement**.
+2. Calculate the difference between their means.
+3. Repeat the process **10,000 times**.
+4. Use the 2.5th and 97.5th percentiles of the bootstrap distribution as the 95% confidence interval.
+5. Check whether the interval contains zero.
+
+---
+
+## 💡 Key Findings
+
+* Weekly login hours show a **positive association** with course completion.
+* The login-hours result should **not be interpreted as proof of causation**.
+* Course track is correctly treated as a **categorical comparison**.
+* **Data Science has the highest observed average completion** among the three tracks.
+* Forum activity is reported using its Pearson correlation, including weak or null results where applicable.
+* The overall completion mean is calculated directly from the dataset.
+* Data Science has an average completion rate approximately **9.82 percentage points higher** than Web Dev.
+* The Bootstrap 95% CI for the Data Science–Web Dev mean difference is **[6.3050, 13.2346]**.
+* The confidence interval does **not include zero**, supporting a statistically significant difference at the 5% level.
+
+---
+
+## 🧠 Correct Interpretation
+
+The analysis demonstrates the importance of distinguishing **statistical association from causation**. Visual patterns and correlations can identify relationships in the data, but they do not by themselves establish causal effects.
+
+The Data Science vs. Web Dev comparison is strengthened by a Bootstrap confidence interval rather than relying solely on visual differences. Numerical claims are also verified through fresh calculations from the dataset.
+
+Overall, the analysis emphasizes **accuracy, reproducibility, statistical reasoning, and responsible interpretation of EDA results**.
+
+---
+
+## 🛠️ Tools & Technologies
+
+* **Python**
+* **Pandas** — Data manipulation and analysis
+* **NumPy** — Numerical computations and bootstrap resampling
+* **Matplotlib** — Data visualization
+* **Jupyter Notebook** — Interactive analysis
 
 ---
 
 ## 📁 Project Structure
 
-The project is organized as follows:
-
 ```text
-Day2/
+Week6/
 │
-├── Data_Cleaning_Preprocessing_EDA_Practical.ipynb
+├── Day_2/
+│   └── ...
 │
 ├── Figures/
-│   ├── 01_salary_distribution.png
-│   ├── 02_employees_by_department.png
-│   ├── 03_experience_vs_salary.png
-│   ├── 04_salary_boxplot.png
-│   └── 05_correlation_heatmap.png
+│   └── ...
 │
 ├── README.md
-│
-└── requirements.txt
+├── requirements.txt
+└── .gitignore
 ```
 
-### 📄 Files & Directories
-
-| File / Directory                                  | Description                                                                                        |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `Data_Cleaning_Preprocessing_EDA_Practical.ipynb` | Main Jupyter Notebook containing explanations, Python code, practical implementation, and analysis |
-| `Figures/`                                        | Contains all visualizations generated during the practical work                                    |
-| `README.md`                                       | Project documentation and overview                                                                 |
-| `requirements.txt`                                | Contains the Python dependencies required to run the notebook                                      |
-
 ---
 
-# 🎯 Objectives
+## ▶️ How to Run
 
-The main objectives of this practical session were to:
+### 1. Clone the repository
 
-1. Understand the importance of **data cleaning**.
-2. Identify and handle **missing values**.
-3. Detect and remove **duplicate records**.
-4. Handle **inconsistent categorical values**.
-5. Understand why categorical data needs to be encoded.
-6. Implement **One-Hot Encoding**.
-7. Implement **Label Encoding**.
-8. Understand the need for **feature scaling**.
-9. Implement **Min-Max Scaling**.
-10. Implement **Standardization and Z-score transformation**.
-11. Understand the difference between **Normalization and Standardization**.
-12. Perform **Exploratory Data Analysis (EDA)**.
-13. Analyze relationships between numerical features using **correlation**.
-14. Create and interpret different types of visualizations.
-15. Save generated figures in a separate `Figures` directory.
-
----
-
-# 🧹 1. Data Cleaning
-
-Data cleaning is the process of identifying and fixing problems in raw data before performing analysis.
-
-In this practical, I worked with common data-quality issues such as:
-
-* Missing values
-* Duplicate records
-* Inconsistent categorical values
-
-### Missing Values
-
-Missing values occur when information is not available for a particular record.
-
-For numerical features, I practiced filling missing values using the **median**.
-
-### Duplicate Records
-
-Duplicate rows can affect calculations and analysis by counting the same record more than once.
-
-I checked for duplicate records and removed them where necessary.
-
-### Inconsistent Values
-
-The dataset contained inconsistent capitalization such as:
-
-```text
-Lahore
-lahore
+```bash
+git clone <repository-url>
+cd week6
 ```
 
-These values represent the same city, so I standardized them into a consistent format.
-
----
-
-# 🔤 2. Categorical Data Encoding
-
-Categorical data contains values such as:
-
-```text
-IT
-HR
-Finance
-```
-
-Many machine learning algorithms require numerical input, so categorical values may need to be converted into numerical representations.
-
-## One-Hot Encoding
-
-One-Hot Encoding creates separate binary columns for each category.
-
-For example:
-
-| Department | Finance | HR | IT |
-| ---------- | ------: | -: | -: |
-| IT         |       0 |  0 |  1 |
-| HR         |       0 |  1 |  0 |
-| Finance    |       1 |  0 |  0 |
-
-A value of `1` indicates that the record belongs to that category.
-
-## Label Encoding
-
-Label Encoding assigns a numerical label to each category.
-
-For example:
-
-```text
-Finance → 0
-HR      → 1
-IT      → 2
-```
-
-These numbers are labels and do not necessarily indicate an actual ranking between categories.
-
----
-
-# ⚖️ 3. Feature Scaling
-
-Different numerical features can have very different ranges.
-
-For example:
-
-```text
-Age          → 20–40
-Experience   → 1–10
-Salary       → 45,000–120,000
-```
-
-Feature scaling helps bring numerical features onto comparable scales.
-
-Two techniques were practically implemented.
-
-## Min-Max Scaling
-
-Min-Max Scaling transforms values into a fixed range, commonly:
-
-```text
-0 to 1
-```
-
-The smallest value becomes `0`, while the largest value becomes `1`.
-
-## Standardization
-
-Standardization transforms values based on their:
-
-* Mean
-* Standard deviation
-
-After standardization:
-
-```text
-Mean ≈ 0
-Standard Deviation ≈ 1
-```
-
-The resulting transformed value is called a **Z-score**.
-
----
-
-# 🔎 4. Exploratory Data Analysis (EDA)
-
-Exploratory Data Analysis is used to understand the characteristics, patterns, distributions, and relationships within a dataset.
-
-In this practical, I used both **statistical analysis and visualization**.
-
-The notebook includes:
-
-### 📊 Summary Statistics
-
-Used to understand:
-
-* Mean
-* Standard deviation
-* Minimum
-* Maximum
-* Quartiles
-* Count
-
-### 📈 Histogram
-
-Used to understand the distribution of numerical values.
-
-The notebook uses a histogram to visualize:
-
-**Salary Distribution**
-
-### 📊 Bar Chart
-
-Used to compare categories.
-
-The notebook visualizes:
-
-**Number of Employees by Department**
-
-### 🔵 Scatter Plot
-
-Used to examine the relationship between two numerical variables.
-
-The notebook visualizes:
-
-**Experience vs Salary**
-
-A trend line is also included to show the overall direction of the relationship.
-
-### 📦 Box Plot
-
-Used to understand:
-
-* Data spread
-* Central tendency
-* Potential outliers
-
-The notebook uses a box plot to analyze:
-
-**Salary Distribution**
-
-### 🔥 Correlation Heatmap
-
-Used to visually examine correlations between numerical features.
-
-The heatmap includes:
-
-* Age
-* Experience
-* Salary
-
----
-
-# 🖼️ 5. Generated Figures
-
-All figures generated during the practical session are automatically saved inside the `Figures/` directory.
-
-The figures are saved at **300 DPI** so they can also be used in reports and documentation.
-
-| Figure                           | Purpose                                              |
-| -------------------------------- | ---------------------------------------------------- |
-| `01_salary_distribution.png`     | Shows the distribution of employee salaries          |
-| `02_employees_by_department.png` | Compares employees across departments                |
-| `03_experience_vs_salary.png`    | Shows the relationship between experience and salary |
-| `04_salary_boxplot.png`          | Shows salary spread and potential outliers           |
-| `05_correlation_heatmap.png`     | Shows correlations between numerical features        |
-
----
-
-# 🛠️ Technologies & Libraries
-
-The practical work was implemented using Python and the following libraries:
-
-* **Python**
-* **Pandas** — data manipulation and analysis
-* **NumPy** — numerical operations
-* **Matplotlib** — data visualization
-* **SciPy** — scientific and numerical computing
-* **Scikit-learn** — preprocessing and feature transformation
-* **Jupyter Notebook** — interactive practical implementation
-
----
-
-# ⚙️ Installation & Setup
-
-## 1. Create a Virtual Environment
-
-It is recommended to use a virtual environment for the project.
+### 2. Create and activate a virtual environment
 
 ```bash
 python3 -m venv .venv
-```
-
-## 2. Activate the Virtual Environment
-
-### Linux / macOS
-
-```bash
 source .venv/bin/activate
 ```
 
-### Windows
-
-```bash
-.venv\Scripts\activate
-```
-
-## 3. Install Dependencies
-
-After activating the virtual environment:
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-# ▶️ Running the Notebook
-
-Start Jupyter Notebook using:
+### 4. Launch Jupyter
 
 ```bash
 jupyter notebook
 ```
 
-Then open:
-
-```text
-Data_Cleaning_Preprocessing_EDA_Practical.ipynb
-```
-
-Run the notebook **from top to bottom** so that each step is executed in the correct order.
+Open the relevant notebook and run the cells from top to bottom.
 
 ---
 
-# 📋 Requirements
+## ✅ Conclusion
 
-The required Python packages are listed in:
+This project demonstrates a **precision-focused EDA workflow** where findings are supported by verified calculations and appropriate statistical methods. The analysis carefully separates association from causation, treats categorical variables correctly, and uses Bootstrap confidence intervals to quantify uncertainty in group differences.
 
-```text
-requirements.txt
-```
-
-Current dependencies include:
-
-```text
-numpy==2.2.6
-pandas==2.3.3
-matplotlib==3.10.9
-scipy==1.15.3
-scikit-learn
-jupyter
-```
-
----
-
-# 🧠 Key Learning
-
-The main learning from this practical session was that **data analysis starts with understanding and preparing the data**.
-
-A typical workflow can be summarized as:
-
-```text
-Raw Data
-   ↓
-Inspect Data
-   ↓
-Clean Data
-   ↓
-Handle Missing Values
-   ↓
-Remove Duplicates
-   ↓
-Fix Inconsistencies
-   ↓
-Encode Categorical Data
-   ↓
-Scale / Transform Features
-   ↓
-Perform EDA
-   ↓
-Visualize Data
-   ↓
-Interpret Results
-```
-
-The goal was not only to execute Python code, but also to understand:
-
-
+The final results provide a more reliable and statistically responsible understanding of learner engagement and course completion.
