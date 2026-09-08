@@ -1,0 +1,285 @@
+# German Credit Dataset — Classification Pipeline
+
+## 📌 Overview
+
+This project applies the classification pipeline developed during Week 06 to a **real-world German Credit dataset**. Unlike the controlled synthetic datasets used earlier, this dataset contains mixed numerical and categorical features, class imbalance, and real-world patterns that require more careful preprocessing and evaluation.
+
+The main goal is to predict whether a credit applicant represents a **Bad** or **Good** credit risk while comparing multiple classification models.
+
+---
+
+## 🎯 Objectives
+
+* Explore and understand a real-world classification dataset.
+* Identify numerical and categorical features.
+* Handle categorical variables using one-hot encoding.
+* Investigate class imbalance.
+* Exclude `personal_status` from model features to avoid directly using a sensitive attribute.
+* Establish a simple baseline for comparison.
+* Train and compare multiple classification models.
+* Evaluate models using metrics beyond accuracy.
+* Analyze ROC-AUC and ROC curves.
+* Examine model calibration.
+* Perform confusion-matrix and error analysis.
+* Identify the most influential features using Random Forest.
+
+---
+
+## 📊 Dataset
+
+**Dataset:** Statlog German Credit Dataset
+**Samples:** 1,000
+**Original Features:** 20 predictors
+**Target:** `class`
+
+### Target Classes
+
+| Class | Count | Percentage |
+| ----- | ----: | ---------: |
+| Good  |   700 |        70% |
+| Bad   |   300 |        30% |
+
+The target was encoded as:
+
+* `0` → Good
+* `1` → Bad
+
+Therefore, **Bad credit is treated as the positive class** during evaluation.
+
+---
+
+## 🔍 Exploratory Data Analysis
+
+The dataset contains both numerical and categorical variables.
+
+### Numerical Features
+
+* `duration`
+* `credit_amount`
+* `installment_commitment`
+* `residence_since`
+* `age`
+* `existing_credits`
+* `num_dependents`
+
+The numerical variables have different scales and distributions. In particular, `credit_amount` is right-skewed, while several other numerical variables are discrete or ordinal.
+
+### Categorical Features
+
+The dataset contains categorical information related to:
+
+* Checking status
+* Credit history
+* Purpose
+* Savings status
+* Employment
+* Personal status
+* Property
+* Housing
+* Job
+* Telephone
+* Foreign worker
+* Other payment plans and parties
+
+There were **no missing values and no duplicate rows**.
+
+---
+
+## ⚙️ Preprocessing
+
+The preprocessing pipeline included:
+
+1. Separating predictors and target.
+2. Removing `personal_status` from model inputs.
+3. Encoding categorical features using **one-hot encoding**.
+4. Using `drop_first=True` to avoid redundant dummy variables.
+5. Splitting the data into training and testing sets using a **70/30 stratified split**.
+6. Standardizing features for Logistic Regression.
+7. Keeping tree-based models on the original encoded feature scale.
+
+After one-hot encoding, the feature matrix contained **45 features**.
+
+---
+
+## 🧪 Models
+
+Three classification models were trained:
+
+### 1. Logistic Regression
+
+A linear classification model used as a strong interpretable baseline. Standardized features were used before training.
+
+### 2. Decision Tree
+
+A tree-based model capable of learning non-linear relationships and feature interactions without requiring feature scaling.
+
+### 3. Random Forest
+
+An ensemble of decision trees designed to provide more robust predictions and reduce the limitations of a single decision tree.
+
+---
+
+## 📏 Evaluation Metrics
+
+Because the dataset contains more Good than Bad applicants, accuracy alone is not sufficient.
+
+The following metrics were used:
+
+* **Accuracy** — overall proportion of correct predictions.
+* **Precision** — proportion of applicants predicted as Bad who were actually Bad.
+* **Recall** — proportion of actual Bad applicants correctly identified.
+* **F1-Score** — balance between Precision and Recall.
+* **ROC-AUC** — ability to distinguish between Good and Bad applicants across different thresholds.
+* **Confusion Matrix** — detailed analysis of correct predictions and classification errors.
+* **Calibration Curve** — evaluates whether predicted Bad probabilities are reliable.
+
+---
+
+## 📌 Baseline
+
+The baseline predicts every applicant as **Good**.
+
+Since 70% of the dataset belongs to the Good class, this simple strategy achieves:
+
+* **Accuracy: 70%**
+* **Bad Precision: 0%**
+* **Bad Recall: 0%**
+* **Bad F1-Score: 0%**
+
+This demonstrates why a model should not be judged by accuracy alone.
+
+---
+
+## 📈 Model Comparison
+
+| Model               | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
+| ------------------- | -------: | --------: | -----: | -------: | ------: |
+| Logistic Regression |    74.0% |     79.5% |  84.8% |    82.0% |   0.766 |
+| Decision Tree       |    64.7% |     73.9% |  76.7% |    75.2% |   0.613 |
+| Random Forest       |    73.0% |     76.3% |  89.0% |    82.2% |   0.757 |
+
+> **Note:** Precision, Recall, and F1-Score above should be interpreted according to the evaluation output generated by the notebook.
+
+Overall, Logistic Regression provided the strongest discrimination based on ROC-AUC, while Random Forest achieved a comparable F1-Score.
+
+---
+
+## 📉 ROC-AUC Analysis
+
+ROC-AUC was used to evaluate how well each model separates Good and Bad applicants across different classification thresholds.
+
+* **Logistic Regression:** 0.766
+* **Random Forest:** 0.757
+* **Decision Tree:** 0.613
+
+Logistic Regression achieved the highest ROC-AUC, indicating the strongest overall class discrimination among the tested models.
+
+---
+
+## 🎯 Calibration Analysis
+
+Calibration was used to determine whether predicted probabilities correspond to actual outcomes.
+
+For example, if the model predicts:
+
+> **P(Bad) = 0.70**
+
+then approximately 70% of applicants within that probability range should actually be Bad for the model to be well calibrated.
+
+The calibration analysis showed that **Logistic Regression produced the most reliable probability estimates** among the tested models.
+
+---
+
+## 🚨 Error Analysis
+
+The confusion matrix was used to investigate model errors.
+
+Two important types of errors are:
+
+* **False Positive:** A Good applicant is predicted as Bad.
+* **False Negative:** A Bad applicant is predicted as Good.
+
+In credit-risk prediction, False Negatives can be particularly important because they represent **Bad applicants incorrectly classified as Good**, potentially increasing financial risk.
+
+The error analysis therefore provides more practical insight than accuracy alone.
+
+---
+
+## 🌲 Random Forest Feature Importance
+
+The most influential Random Forest features included:
+
+1. `credit_amount`
+2. `duration`
+3. `age`
+4. `checking_status`
+5. `installment_commitment`
+6. `residence_since`
+7. `own_telephone`
+8. `savings_status`
+9. `credit_history`
+10. `other_payment_plans`
+
+`credit_amount`, `duration`, and `age` had the highest individual importance values.
+
+Feature importance indicates the **relative contribution of a feature to the Random Forest's decisions**. It does not indicate whether a feature increases or decreases credit risk.
+
+---
+
+## 🧠 Key Findings
+
+* The real dataset was more challenging than the controlled synthetic datasets because its patterns were less predictable.
+* A simple 70% accuracy baseline was possible because of the class distribution.
+* Accuracy alone could therefore be misleading.
+* Logistic Regression achieved the highest ROC-AUC among the tested models.
+* Decision Tree performed weakest overall.
+* Random Forest provided competitive performance and useful feature-importance insights.
+* Credit amount and loan duration were among the most influential features.
+* Probability calibration provided additional information beyond classification accuracy.
+* Real-world ML requires more careful preprocessing, metric selection, and interpretation than controlled synthetic data.
+
+---
+
+## 💭 Reflection
+
+Working with the German Credit dataset was noticeably different from the synthetic datasets because the data was less predictable and required more careful decisions during preprocessing and evaluation. The class imbalance was also more meaningful in this dataset, which made it clear that simply improving accuracy is not always enough.
+
+What surprised me most was that the baseline could already achieve 70% accuracy by predicting every applicant as Good. My baseline-beating instincts from the controlled datasets still helped, but they did not translate as easily to the real dataset. The improvement over the baseline was more limited, showing that real-world datasets require deeper analysis rather than simply trying to maximize a single metric.
+
+---
+
+## 🛠️ Technologies Used
+
+* Python
+* Pandas
+* NumPy
+* Matplotlib
+* Seaborn
+* Scikit-learn
+* Jupyter Notebook
+
+---
+
+## 📁 Project Structure
+
+```text
+Day5/
+│
+├── README.md
+├── requirements.txt
+├──
+│  └── german_credit_classification.ipynb
+│
+└
+├── confusion_matrix.png
+├── roc_curve.png
+└── calibration_curve.png
+```
+
+---
+
+## ✅ Conclusion
+
+This project demonstrates a complete classification workflow on a real-world credit dataset, from **EDA and preprocessing to model comparison, ROC-AUC analysis, calibration, error analysis, and feature importance**.
+
+The main lesson is that real-world classification is not only about achieving high accuracy. Understanding **class imbalance, prediction errors, probability reliability, and the practical consequences of different mistakes** is equally important.
